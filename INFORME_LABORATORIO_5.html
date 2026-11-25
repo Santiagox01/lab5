@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Laboratorio 4 - LibroYa (Generación de Aplicaciones con IA)</title>
+    <title>Informe Laboratorio 5 - LibroYa (Generación de Aplicaciones con IA)</title>
     <style>
     
 body {
@@ -158,20 +158,20 @@ blockquote {
     </style>
 </head>
 <body>
-<h1>INFORME DE LABORATORIO N° 4</h1>
+<h1>INFORME DE LABORATORIO N° 5</h1>
 <h1>GENERACIÓN DE APLICACIONES FULL-STACK CON INTELIGENCIA ARTIFICIAL (LIBROYA)</h1>
 <p><strong>Universidad de Antioquia</strong><br />
 <strong>Facultad de Ingeniería — Departamento de Ingeniería de Sistemas</strong><br />
 <strong>Curso:</strong> Fundamentos de Sistemas de Información (2026)<br />
 <strong>Profesor:</strong> Diego José Luis Botia V.<br />
 <strong>Estudiante:</strong> Santiago Jaramillo<br />
-<strong>Fecha:</strong> 25 de noviembre de 2026<br />
+<strong>Fecha:</strong> 24 de noviembre de 2026<br />
 <strong>Repositorio GitHub:</strong> <a href="https://github.com/Santiagox01/lab4">https://github.com/Santiagox01/lab4</a><br />
 <strong>Frontend desplegado (Railway):</strong> <a href="https://lab4-production-052fb297.up.railway.app">https://lab4-production-052fb297.up.railway.app</a><br />
 <strong>Backend desplegado (Railway):</strong> <a href="https://server-production-75813d16.up.railway.app/health">https://server-production-75813d16.up.railway.app/health</a></p>
 <hr />
 <h2>1. RESUMEN EJECUTIVO</h2>
-<p>El presente informe documenta el diseño, construcción iterativa, auditoría de seguridad, despliegue en la nube y verificación funcional del <strong>Laboratorio N° 4</strong>, aplicando ingeniería asistida por Inteligencia Artificial con revisión arquitectónica continua (sin aceptar cambios a ciegas). Siguiendo los entregables especificados en la Sección 13 de la guía, se construyó <strong>LibroYa</strong>, una aplicación web full-stack de comercio electrónico para la <strong>venta de libros electrónicos (eBooks, PDF, Audiolibros y ediciones impresas + eBook), gestión de catálogo y stock, pasarela de pago verificada en PayPal Sandbox y gestión/seguimiento de envíos en tiempo real</strong>.</p>
+<p>El presente informe documenta el diseño, construcción iterativa, auditoría de seguridad, despliegue en la nube y verificación funcional del <strong>Laboratorio N° 5</strong>, aplicando ingeniería asistida por Inteligencia Artificial con revisión arquitectónica continua (sin aceptar cambios a ciegas). Siguiendo los entregables especificados en la Sección 13 de la guía, se construyó <strong>LibroYa</strong>, una aplicación web full-stack de comercio electrónico para la <strong>venta de libros electrónicos (eBooks, PDF, Audiolibros y ediciones impresas + eBook), gestión de catálogo y stock, pasarela de pago verificada en PayPal Sandbox y gestión/seguimiento de envíos en tiempo real</strong>.</p>
 <p>La arquitectura desacopla por completo la interfaz de usuario del servidor de negocio:
 - <strong>Frontend (<code>web/</code>):</strong> Next.js 15 (App Router), React 19, TypeScript y Tailwind CSS, responsable exclusivamente de la experiencia de usuario y del carrito local, sin rutas API internas ni credenciales secretas.
 - <strong>Backend (<code>server/</code>):</strong> Node.js, Express, TypeScript, Mongoose y Socket.IO en un único proceso persistente encargado de autenticación JWT, control de acceso basado en roles (<code>cliente</code> y <code>administrador</code>), recálculo autoritativo de importes, integración OAuth2/Orders v2 con PayPal Sandbox, máquina de estados explícita para despachos y difusión en vivo vía WebSockets.

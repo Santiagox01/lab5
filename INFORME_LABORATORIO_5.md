@@ -1,4 +1,4 @@
-# INFORME DE LABORATORIO N° 4
+# INFORME DE LABORATORIO N° 5
 # GENERACIÓN DE APLICACIONES FULL-STACK CON INTELIGENCIA ARTIFICIAL (LIBROYA)
 
 **Universidad de Antioquia**  
@@ -6,7 +6,7 @@
 **Curso:** Fundamentos de Sistemas de Información (2026)  
 **Profesor:** Diego José Luis Botia V.  
 **Estudiante:** Santiago Jaramillo  
-**Fecha:** 25 de noviembre de 2026  
+**Fecha:** 24 de noviembre de 2026  
 **Repositorio GitHub:** [https://github.com/Santiagox01/lab4](https://github.com/Santiagox01/lab4)  
 **Frontend desplegado (Railway):** [https://lab4-production-052fb297.up.railway.app](https://lab4-production-052fb297.up.railway.app)  
 **Backend desplegado (Railway):** [https://server-production-75813d16.up.railway.app/health](https://server-production-75813d16.up.railway.app/health)
@@ -15,7 +15,7 @@
 
 ## 1. RESUMEN EJECUTIVO
 
-El presente informe documenta el diseño, construcción iterativa, auditoría de seguridad, despliegue en la nube y verificación funcional del **Laboratorio N° 4**, aplicando ingeniería asistida por Inteligencia Artificial con revisión arquitectónica continua (sin aceptar cambios a ciegas). Siguiendo los entregables especificados en la Sección 13 de la guía, se construyó **LibroYa**, una aplicación web full-stack de comercio electrónico para la **venta de libros electrónicos (eBooks, PDF, Audiolibros y ediciones impresas + eBook), gestión de catálogo y stock, pasarela de pago verificada en PayPal Sandbox y gestión/seguimiento de envíos en tiempo real**.
+El presente informe documenta el diseño, construcción iterativa, auditoría de seguridad, despliegue en la nube y verificación funcional del **Laboratorio N° 5**, aplicando ingeniería asistida por Inteligencia Artificial con revisión arquitectónica continua (sin aceptar cambios a ciegas). Siguiendo los entregables especificados en la Sección 13 de la guía, se construyó **LibroYa**, una aplicación web full-stack de comercio electrónico para la **venta de libros electrónicos (eBooks, PDF, Audiolibros y ediciones impresas + eBook), gestión de catálogo y stock, pasarela de pago verificada en PayPal Sandbox y gestión/seguimiento de envíos en tiempo real**.
 
 La arquitectura desacopla por completo la interfaz de usuario del servidor de negocio:
 - **Frontend (`web/`):** Next.js 15 (App Router), React 19, TypeScript y Tailwind CSS, responsable exclusivamente de la experiencia de usuario y del carrito local, sin rutas API internas ni credenciales secretas.
