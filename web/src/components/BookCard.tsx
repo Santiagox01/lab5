@@ -29,7 +29,7 @@ export function BookCard({
           alt={`Portada de ${book.title}`}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         />
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+        <div className="absolute inset-x-3 top-3 flex flex-wrap gap-1.5">
           <span className="rounded-md bg-obsidian/85 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-amber-300 backdrop-blur-sm border border-stone-700">
             {book.category}
           </span>
@@ -38,18 +38,27 @@ export function BookCard({
           </span>
         </div>
 
-        <div className="absolute right-3 top-3">
+        <div className="absolute bottom-3 right-3">
           {isOutOfStock ? (
-            <span className="rounded-full bg-rose-950/90 px-2.5 py-0.5 text-xs font-medium text-rose-300 border border-rose-500/40">
+            <span
+              data-testid="stock-badge"
+              className="whitespace-nowrap rounded-full bg-rose-950/90 px-2.5 py-0.5 text-xs font-medium text-rose-300 border border-rose-500/40"
+            >
               Agotado
             </span>
           ) : isLowStock ? (
-            <span className="rounded-full bg-amber-950/90 px-2.5 py-0.5 text-xs font-medium text-amber-300 border border-amber-500/40">
-              Últimas {book.stock} uds.
+            <span
+              data-testid="stock-badge"
+              className="whitespace-nowrap rounded-full bg-amber-950/90 px-2.5 py-0.5 text-xs font-medium text-amber-300 border border-amber-500/40"
+            >
+              {`Últimas ${book.stock} uds.`}
             </span>
           ) : (
-            <span className="rounded-full bg-emerald-950/90 px-2.5 py-0.5 text-xs font-medium text-emerald-300 border border-emerald-500/40">
-              Stock: {book.stock}
+            <span
+              data-testid="stock-badge"
+              className="whitespace-nowrap rounded-full bg-emerald-950/90 px-2.5 py-0.5 text-xs font-medium text-emerald-300 border border-emerald-500/40"
+            >
+              {`Stock: ${book.stock}`}
             </span>
           )}
         </div>
