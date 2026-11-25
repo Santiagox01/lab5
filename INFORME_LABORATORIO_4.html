@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Laboratorio 4 - LibroYa (Generación de Aplicaciones con IA)</title>
+    <style>
+    
+body {
+    font-family: 'Times New Roman', Times, Georgia, serif;
+    line-height: 1.58;
+    color: #000000;
+    max-width: 920px;
+    margin: 40px auto;
+    padding: 0 35px;
+    background-color: #ffffff;
+}
+
+h1, h2, h3, h4 {
+    color: #000000;
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: 2.05em;
+    border-bottom: 3px solid #000000;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 1.42em;
+    border-bottom: 1.5px solid #000000;
+    padding-bottom: 5px;
+    margin-top: 32px;
+}
+
+h3 {
+    font-size: 1.18em;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 3px;
+}
+
+p, li {
+    font-size: 1.01em;
+    text-align: justify;
+    color: #000000;
+}
+
+strong {
+    color: #000000;
+    font-weight: 700;
+}
+
+a {
+    color: #000000;
+    text-decoration: underline;
+}
+
+hr {
+    border: none;
+    border-top: 1.5px solid #000000;
+    margin: 26px 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 18px 0;
+    font-size: 0.92em;
+}
+
+table, th, td {
+    border: 1px solid #000000;
+}
+
+th, td {
+    padding: 7px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #efefef;
+    color: #000000;
+    font-weight: 700;
+}
+
+pre, code {
+    font-family: 'Courier New', Courier, monospace;
+    color: #000000;
+}
+
+pre {
+    background-color: #f8f8f8;
+    border: 1px solid #000000;
+    border-left: 5px solid #000000;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-size: 0.86em;
+    line-height: 1.4;
+    margin: 16px 0;
+}
+
+code {
+    background-color: #f2f2f2;
+    padding: 1px 4px;
+    border: 1px solid #cccccc;
+    font-size: 0.9em;
+}
+
+pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+img {
+    max-width: 95%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border: 1.5px solid #000000;
+    padding: 4px;
+    background: #ffffff;
+}
+
+blockquote {
+    border-left: 4px solid #000000;
+    margin: 16px 0;
+    padding: 10px 18px;
+    background-color: #f8f8f8;
+    color: #000000;
+}
+
+@media print {
+    body {
+        max-width: 100%;
+        margin: 16mm 14mm;
+        padding: 0;
+    }
+    img {
+        max-width: 92%;
+        page-break-inside: avoid;
+    }
+    table, pre {
+        page-break-inside: avoid;
+    }
+    h1, h2, h3 {
+        page-break-after: avoid;
+    }
+}
+
+    </style>
+</head>
+<body>
+<h1>INFORME DE LABORATORIO N° 4</h1>
+<h1>GENERACIÓN DE APLICACIONES FULL-STACK CON INTELIGENCIA ARTIFICIAL (LIBROYA)</h1>
+<p><strong>Universidad de Antioquia</strong><br />
+<strong>Facultad de Ingeniería — Departamento de Ingeniería de Sistemas</strong><br />
+<strong>Curso:</strong> Fundamentos de Sistemas de Información (2026)<br />
+<strong>Profesor:</strong> Diego José Luis Botia V.<br />
+<strong>Estudiante:</strong> Santiago Jaramillo<br />
+<strong>Fecha:</strong> 25 de noviembre de 2026<br />
+<strong>Repositorio GitHub:</strong> <a href="https://github.com/Santiagox01/lab4">https://github.com/Santiagox01/lab4</a><br />
+<strong>Frontend desplegado (Railway):</strong> <a href="https://lab4-production-052fb297.up.railway.app">https://lab4-production-052fb297.up.railway.app</a><br />
+<strong>Backend desplegado (Railway):</strong> <a href="https://server-production-75813d16.up.railway.app/health">https://server-production-75813d16.up.railway.app/health</a></p>
+<hr />
+<h2>1. RESUMEN EJECUTIVO</h2>
+<p>El presente informe documenta el diseño, construcción iterativa, auditoría de seguridad, despliegue en la nube y verificación funcional del <strong>Laboratorio N° 4</strong>, aplicando ingeniería asistida por Inteligencia Artificial con revisión arquitectónica continua (sin aceptar cambios a ciegas). Siguiendo los entregables especificados en la Sección 13 de la guía, se construyó <strong>LibroYa</strong>, una aplicación web full-stack de comercio electrónico para la <strong>venta de libros electrónicos (eBooks, PDF, Audiolibros y ediciones impresas + eBook), gestión de catálogo y stock, pasarela de pago verificada en PayPal Sandbox y gestión/seguimiento de envíos en tiempo real</strong>.</p>
+<p>La arquitectura desacopla por completo la interfaz de usuario del servidor de negocio:
+- <strong>Frontend (<code>web/</code>):</strong> Next.js 15 (App Router), React 19, TypeScript y Tailwind CSS, responsable exclusivamente de la experiencia de usuario y del carrito local, sin rutas API internas ni credenciales secretas.
+- <strong>Backend (<code>server/</code>):</strong> Node.js, Express, TypeScript, Mongoose y Socket.IO en un único proceso persistente encargado de autenticación JWT, control de acceso basado en roles (<code>cliente</code> y <code>administrador</code>), recálculo autoritativo de importes, integración OAuth2/Orders v2 con PayPal Sandbox, máquina de estados explícita para despachos y difusión en vivo vía WebSockets.
+- <strong>Persistencia en la nube:</strong> MongoDB Atlas (<code>libroya</code>), con colecciones <code>users</code>, <code>books</code>, <code>orders</code> y <code>payments</code>.
+- <strong>Despliegue y pruebas:</strong> Servicios separados en Railway (<code>/server</code> y <code>/web</code>), suite de pruebas automatizadas en backend (<strong>Vitest + Supertest + MongoMemoryServer + Socket.IO Client</strong>, 8/8 suites aprobadas) y evaluación E2E en la nube con <strong>TestSprite</strong> (<code>Live Web App</code> guiada por <code>PRD.md</code>), logrando corregir un defecto visual real detectado por la suite (<code>CATALOG-003</code>).</p>
+<hr />
+<h2>2. INTRODUCCIÓN Y ARQUITECTURA DE REFERENCIA</h2>
+<h3>2.1. Separación Frontend/Backend y Límites de Confianza</h3>
+<p>La generación de software asistida por IA exige definir previamente contratos de datos, responsabilidades y límites de confianza para evitar vulnerabilidades frecuentes (como validar precios o confirmar pagos desde el navegador). En <strong>LibroYa</strong>:
+1. <strong>El navegador nunca decide precios ni estados pagados:</strong> Al confirmar una compra, el frontend envía exclusivamente identificadores de libros (<code>bookId</code>), cantidades enteras (<code>quantity</code>), dirección de entrega y método de envío (<code>DIGITAL_INSTANT</code>, <code>STANDARD</code> o <code>EXPRESS</code>). El servidor consulta los precios unitarios y el inventario vigente en MongoDB Atlas y recalcula <code>subtotal</code>, <code>shippingCost</code> y <code>total</code>.
+2. <strong>Validación en backend de PayPal Sandbox:</strong> Solo el servidor posee <code>PAYPAL_CLIENT_SECRET</code>. Tras la aprobación del comprador en el SDK de PayPal, el cliente invoca <code>POST /api/payments/paypal/capture</code>, donde el backend consulta directamente a PayPal v2 Orders API, verifica <code>status === "COMPLETED"</code>, moneda <code>USD</code>, importe coincidente y <code>custom_id</code>, descuenta el inventario de forma atómica y promueve el pedido a <code>PAID</code>.
+3. <strong>WebSockets en el mismo proceso del backend:</strong> Al alojar <strong>Socket.IO</strong> dentro del servidor Express (<code>server/src/socket/io.ts</code>), cada mutación de pago, cambio de estado logístico o ajuste de stock emite notificaciones autenticadas en milisegundos sin requerir consultas continuas (<em>polling</em>) ni infraestructura de mensajería adicional.</p>
+<p><img alt="Diagrama de Arquitectura y Máquina de Estados de LibroYa" src="imagenes_informe_lab4/00_arquitectura_sistema.png" /></p>
+<h3>2.2. Estructura del Monorepo</h3>
+<pre><code class="language-text">lab4/
+├── package.json              # Scripts globales (dev, build, test, seed)
+├── .gitignore                # Excluye .env, .env.local, node_modules, dist, .next
+├── .env.example              # Referencia raíz sin secretos
+├── PRD.md                    # Requisitos funcionales y criterios para TestSprite
+├── README.md                 # Documentación técnica y guía Railway
+├── server/                   # Backend Express + Mongoose + Socket.IO + PayPal
+│   ├── railway.json          # Build/start y healthcheck /health
+│   ├── .env.example          # Plantilla de variables backend
+│   └── src/
+│       ├── config/           # Carga de entorno (env.ts) y conexión Atlas (db.ts)
+│       ├── models/           # User, Book, Order, Payment
+│       ├── middleware/       # JWT auth, requireRole, rateLimit, errorHandler
+│       ├── services/         # orderStateMachine.ts, paypalService.ts
+│       ├── socket/           # RealtimeHub (Socket.IO autenticado)
+│       ├── routes/           # auth, books, orders, payments
+│       ├── seed/             # Carga idempotente de usuarios demo, 10 libros y 2 pedidos
+│       └── __tests__/        # Suite integral Vitest (api.test.ts)
+└── web/                      # Frontend Next.js 15 App Router (solo UI)
+    ├── railway.json          # Build/start Next.js en 0.0.0.0:$PORT
+    ├── .env.example          # Solo NEXT_PUBLIC_API_URL y NEXT_PUBLIC_PAYPAL_CLIENT_ID
+    ├── public/covers/        # 10 portadas editoriales SVG locales
+    └── src/
+        ├── app/              # /, /catalogo, /login, /registro, /carrito, /checkout/[orderId], /pedidos, /admin
+        ├── components/       # Navbar, BookCard, BookDetailModal, PayPalCheckout, KanbanBoard, CatalogAdminPanel
+        ├── context/          # AuthContext, CartContext
+        └── lib/              # api.ts, socket.ts, types.ts
+</code></pre>
+<hr />
+<h2>3. MODELO DE DATOS, MÁQUINA DE ESTADOS Y CONTRATO DE API</h2>
+<h3>3.1. Colecciones en MongoDB Atlas (<code>libroya</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Colección</th>
+<th>Campos principales</th>
+<th>Reglas de integridad y seguridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users</code></td>
+<td><code>name</code>, <code>email</code>, <code>passwordHash</code>, <code>role</code>, <code>createdAt</code>, <code>updatedAt</code></td>
+<td><code>role ∈ {cliente, administrador}</code>; registro público asigna siempre <code>cliente</code>; <code>passwordHash</code> cifrado con <code>bcryptjs</code> (cost 10), <code>select: false</code> y omitido en <code>toJSON</code>.</td>
+</tr>
+<tr>
+<td><code>books</code></td>
+<td><code>title</code>, <code>author</code>, <code>isbn</code>, <code>description</code>, <code>category</code>, <code>format</code>, <code>price</code>, <code>stock</code>, <code>available</code>, <code>coverUrl</code>, <code>pages</code>, <code>language</code>, <code>publishedYear</code></td>
+<td><code>isbn</code> único; <code>price &gt; 0</code>; <code>stock</code> entero <code>&gt;= 0</code>; índice compuesto <code>{ category: 1, format: 1, available: 1 }</code>.</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>orderNumber</code>, <code>userId</code>, <code>items[]</code>, <code>shippingAddress</code>, <code>shippingMethod</code>, <code>shippingCost</code>, <code>trackingCode</code>, <code>subtotal</code>, <code>total</code>, <code>status</code>, <code>paymentStatus</code>, <code>paypalOrderId</code>, <code>paidAt</code>, <code>shippedAt</code>, <code>deliveredAt</code></td>
+<td><code>items</code> guarda snapshot histórico (<code>unitPrice</code>, <code>title</code>, <code>format</code>, <code>quantity</code>, <code>subtotal</code>); totales recalculados exclusivamente en backend.</td>
+</tr>
+<tr>
+<td><code>payments</code></td>
+<td><code>orderId</code>, <code>userId</code>, <code>provider</code>, <code>providerOrderId</code>, <code>captureId</code>, <code>amount</code>, <code>currency</code>, <code>status</code>, <code>payerEmail</code></td>
+<td>Nunca almacena datos de tarjeta; índices únicos dispersos en <code>providerOrderId</code> y <code>captureId</code> para evitar capturas duplicadas.</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2. Máquina de Estados Explícita (<code>orderStateMachine.ts</code>)</h3>
+<p>Para impedir saltos ilegales desde la interfaz o manipulaciones directas de la API, el servidor gobierna las transiciones mediante la tabla <code>ADMIN_ALLOWED_TRANSITIONS</code>:
+- <strong>Flujo de pedido y despacho:</strong>
+  <code>PENDING_PAYMENT</code> $\xrightarrow{\text{PayPal CAPTURED}}$ <code>PAID</code> (Pendiente) $\xrightarrow{\text{Admin}}$ <code>PREPARING</code> (En preparación) $\xrightarrow{\text{Admin + guía}}$ <code>SHIPPED</code> (Enviado) $\xrightarrow{\text{Admin}}$ <code>DELIVERED</code> (Entregado).
+- <strong>Flujo de pago:</strong>
+  <code>PENDING</code> $\rightarrow$ <code>CREATED</code> $\rightarrow$ <code>CAPTURED</code> (o <code>FAILED</code> / <code>CANCELLED</code> con posibilidad de reintento sin duplicar la orden).
+- <strong>Restricciones activas:</strong> El endpoint <code>PATCH /api/orders/:id/status</code> rechaza con <strong>HTTP 400</strong> cualquier intento de mover un pedido <code>PENDING_PAYMENT</code> o saltar directamente de <code>PAID</code> a <code>DELIVERED</code>. Al pasar a <code>SHIPPED</code>, si el administrador no digita código de guía, el servidor genera automáticamente <code>LY-ENV-&lt;6 dígitos&gt;</code>.</p>
+<h3>3.3. Endpoints REST Documentados y Control de Acceso</h3>
+<table>
+<thead>
+<tr>
+<th>Método y Ruta</th>
+<th>Propósito</th>
+<th>Control de acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /health</code></td>
+<td>Estado de API y conexión Atlas</td>
+<td>Público; no expone secretos ni URIs</td>
+</tr>
+<tr>
+<td><code>POST /api/auth/register</code></td>
+<td>Crear cuenta de cliente</td>
+<td>Público (rate-limited); fuerza <code>role: "cliente"</code></td>
+</tr>
+<tr>
+<td><code>POST /api/auth/login</code></td>
+<td>Autenticar usuario y emitir JWT</td>
+<td>Público (rate-limited); error genérico <code>401</code></td>
+</tr>
+<tr>
+<td><code>POST /api/auth/logout</code></td>
+<td>Limpiar cookie de sesión</td>
+<td>Público</td>
+</tr>
+<tr>
+<td><code>GET /api/auth/me</code></td>
+<td>Obtener perfil de sesión</td>
+<td>Autenticado (<code>401</code> sin JWT)</td>
+</tr>
+<tr>
+<td><code>GET /api/books</code></td>
+<td>Consultar catálogo y filtros</td>
+<td>Público (<code>category</code>, <code>format</code>, <code>search</code>, <code>inStock</code>)</td>
+</tr>
+<tr>
+<td><code>GET /api/books/:id</code></td>
+<td>Detalle de un título</td>
+<td>Público</td>
+</tr>
+<tr>
+<td><code>POST /api/books</code></td>
+<td>Crear nuevo libro</td>
+<td>Solo <code>administrador</code> (<code>403</code> para clientes)</td>
+</tr>
+<tr>
+<td><code>PATCH /api/books/:id</code></td>
+<td>Editar libro / disponibilidad</td>
+<td>Solo <code>administrador</code>; emite <code>stock:updated</code></td>
+</tr>
+<tr>
+<td><code>PATCH /api/books/:id/stock</code></td>
+<td>Ajuste de inventario (<code>stock</code> o <code>delta</code>)</td>
+<td>Solo <code>administrador</code>; rechaza stock <code>&lt; 0</code>; emite <code>stock:updated</code></td>
+</tr>
+<tr>
+<td><code>DELETE /api/books/:id</code></td>
+<td>Eliminar libro del catálogo</td>
+<td>Solo <code>administrador</code></td>
+</tr>
+<tr>
+<td><code>POST /api/orders</code></td>
+<td>Crear orden <code>PENDING_PAYMENT</code></td>
+<td>Autenticado; valida stock y recalcula totales</td>
+</tr>
+<tr>
+<td><code>GET /api/orders/me</code></td>
+<td>Historial del cliente autenticado</td>
+<td>Autenticado; filtra por <code>userId === req.user.id</code></td>
+</tr>
+<tr>
+<td><code>GET /api/orders</code></td>
+<td>Listar pedidos pagados para Kanban</td>
+<td>Solo <code>administrador</code></td>
+</tr>
+<tr>
+<td><code>GET /api/orders/:id</code></td>
+<td>Consultar orden específica</td>
+<td>Propietario o <code>administrador</code> (<code>403</code> otros)</td>
+</tr>
+<tr>
+<td><code>PATCH /api/orders/:id/status</code></td>
+<td>Avanzar estado en Kanban</td>
+<td>Solo <code>administrador</code>; aplica máquina de estados y emite WS</td>
+</tr>
+<tr>
+<td><code>POST /api/payments/paypal/order</code></td>
+<td>Crear orden en PayPal Sandbox</td>
+<td>Propietario del pedido; revalida stock</td>
+</tr>
+<tr>
+<td><code>POST /api/payments/paypal/capture</code></td>
+<td>Capturar y confirmar compra</td>
+<td>Propietario; idempotente; descuenta stock atómicamente</td>
+</tr>
+<tr>
+<td><code>POST /api/payments/paypal/cancel</code></td>
+<td>Registrar cancelación en PayPal</td>
+<td>Propietario; mantiene <code>PENDING_PAYMENT</code> para reintento</td>
+</tr>
+</tbody>
+</table>
+<h3>3.4. Eventos WebSocket (<code>Socket.IO</code>)</h3>
+<p>El servidor valida el JWT durante el handshake (<code>auth.token</code>, header <code>Authorization</code> o cookie <code>libroya_token</code>) y asigna las salas en el servidor (nunca desde el navegador):
+- <code>user:&lt;id&gt;</code>: todos los usuarios autenticados; recibe <code>order:updated</code> y <code>order:statusChanged</code> únicamente de sus propios pedidos (solo ciudad/país, sin exponer dirección completa a terceros).
+- <code>admin:shipments</code>: exclusivo para <code>role === "administrador"</code>; recibe <code>order:created</code> al confirmarse un pago y <code>order:statusChanged</code> ante actualizaciones del tablero.
+- <code>stock:updated</code>: broadcast de <code>{ bookId, stock, available }</code> para mantener sincronizado el catálogo y los tope máximos del carrito.</p>
+<hr />
+<h2>4. SEGURIDAD, PASARELA PAYPAL SANDBOX Y CONTROL DE STOCK</h2>
+<p>Siguiendo la lista de auditoría de seguridad (Sección 12.2 de la guía), se verificaron los siguientes controles antes y después del despliegue:</p>
+<ol>
+<li><strong>Gestión estricta de secretos:</strong> Las variables <code>MONGODB_URI</code>, <code>JWT_SECRET</code> y <code>PAYPAL_CLIENT_SECRET</code> existen únicamente en <code>server/.env</code> (excluido por <code>.gitignore</code>) y en las variables privadas del servicio <code>server</code> en Railway. El frontend solo conoce <code>NEXT_PUBLIC_API_URL</code> y <code>NEXT_PUBLIC_PAYPAL_CLIENT_ID</code>. El escaneo sobre los 72 archivos rastreados del repositorio arrojó <strong>0 filtraciones</strong>.</li>
+<li><strong>Idempotencia de pagos y protección de inventario:</strong> Al capturar un pago en <code>/api/payments/paypal/capture</code>, si la orden o el documento <code>Payment</code> ya figuran en estado <code>CAPTURED</code>, el backend responde inmediatamente <code>200 { idempotent: true }</code> sin volver a invocar la API de PayPal ni descontar stock por segunda vez. En capturas nuevas, el inventario se decrementa de forma atómica por libro (<code>Book.findOneAndUpdate({ _id, available: true, stock: { $gte: quantity } }, { $inc: { stock: -quantity } })</code>); si cualquier ítem del lote no tiene stock por concurrencia, el servidor revierte los descuentos previos y responde <code>409 Conflict</code>.</li>
+<li><strong>Hardening HTTP y validación de entrada:</strong> <code>helmet()</code> en cabeceras, CORS restringido exactamente a <code>CLIENT_ORIGIN</code>, límite de tasa (<code>express-rate-limit</code>) en <code>/api/auth/login</code> y <code>/api/auth/register</code>, validación estricta de esquemas con <code>zod</code> y escape de metacaracteres en búsquedas textuales con expresiones regulares para prevenir ataques ReDoS.</li>
+</ol>
+<hr />
+<h2>5. DESPLIEGUE EN LA NUBE (MONGODB ATLAS Y RAILWAY)</h2>
+<h3>5.1. Configuración de Servicios</h3>
+<ul>
+<li><strong>Base de datos (<code>MongoDB Atlas</code>):</strong> Clúster <code>xius</code> con base de datos <code>libroya</code> y usuario exclusivo de aplicación. Poblado inicialmente con <code>npm --prefix server run seed</code> (2 cuentas demo ficticias <code>cliente@libroya.com</code> y <code>admin@libroya.com</code>, 10 libros electrónicos incluyendo títulos de stock bajo <code>3</code> y agotado <code>0</code>, y 2 pedidos iniciales para validar historial y Kanban).</li>
+<li><strong>Servicio Backend (<code>server</code> en Railway):</strong> Root Directory <code>/server</code>, compilación <code>npm install &amp;&amp; npm run build</code>, arranque <code>npm start</code> escuchando en <code>0.0.0.0:$PORT</code>, y <em>healthcheck</em> automático en <code>/health</code>.</li>
+<li><strong>Servicio Frontend (<code>web</code> en Railway):</strong> Root Directory <code>/web</code>, compilación <code>npm install &amp;&amp; npm run build</code> (con variables públicas configuradas antes del build), arranque <code>npm start</code> (<code>next start -H 0.0.0.0</code>).</li>
+</ul>
+<h3>5.2. Incidencias Encontradas y Resueltas Durante el Despliegue</h3>
+<table>
+<thead>
+<tr>
+<th>Incidencia observada</th>
+<th>Causa raíz diagnosticada</th>
+<th>Solución aplicada y verificada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>language override unsupported: Español</code> al ejecutar el seed en Atlas</td>
+<td>MongoDB reserva el campo <code>language</code> para el idioma de tokenización en índices <code>text</code> (<code>title/author/description</code>).</td>
+<td>Se reemplazó el índice <code>text</code> por <code>{ category: 1, format: 1, available: 1 }</code> en <code>Book.ts</code> y se sincronizaron índices con <code>Book.syncIndexes()</code>.</td>
+</tr>
+<tr>
+<td><code>[BOOTSTRAP ERROR] Could not connect to any servers in your MongoDB Atlas cluster</code> en Railway</td>
+<td><em>Network Access</em> de Atlas solo autorizaba la IP local de desarrollo y bloqueaba las IPs dinámicas de salida de Railway.</td>
+<td>Se autorizó acceso controlado en Atlas <em>Network Access</em> y se redesplegó <code>server</code>, confirmando <code>"db": "connected"</code> en <code>/health</code>.</td>
+</tr>
+<tr>
+<td><code>Error de solicitud (404)</code> al abrir el frontend desplegado</td>
+<td><code>NEXT_PUBLIC_API_URL</code> fue ingresada inicialmente sin prefijo <code>https://</code>, haciendo que <code>fetch</code> apuntara a rutas inexistentes dentro de Next.js.</td>
+<td>Se corrigió a <code>https://server-production-75813d16.up.railway.app</code> (y <code>CLIENT_ORIGIN</code> en <code>server</code> a <code>https://lab4-production-052fb297.up.railway.app</code>) y se redesplegó <code>web</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. ESTRATEGIA DE PRUEBAS (<code>PRD.md</code>, VITEST Y TESTSPRITE)</h2>
+<h3>6.1. Suite Automatizada de Backend (<code>Vitest + Supertest + Socket.IO</code>)</h3>
+<p>Se implementaron <strong>8 suites integrales</strong> en <code>server/src/__tests__/api.test.ts</code> ejecutadas contra <code>mongodb-memory-server</code>, un gateway mockeado de PayPal y clientes reales de <code>socket.io-client</code>. Todas (<strong>8/8 — 100%</strong>) pasaron tras la compilación final:
+1. <code>GET /health</code> y catálogo público sin sesión con filtros por categoría y disponibilidad.
+2. Registro con rol forzado a <code>cliente</code> (bloquea escalada a <code>administrador</code>), hash <code>bcrypt</code> y ocultamiento de <code>passwordHash</code>.
+3. Bloqueo de rutas protegidas para anónimos (<code>401</code>) y rechazo <code>403</code> para clientes sobre consola admin y stock.
+4. Recálculo autoritativo de precios/envío en servidor (ignora <code>unitPrice</code>/<code>total</code> manipulados) y rechazo <code>400</code>/<code>409</code> por cantidades negativas, direcciones vacías o stock insuficiente.
+5. Aislamiento por propiedad entre clientes (<code>403</code> al consultar o intentar pagar pedido ajeno).
+6. Flujo PayPal completo: cancelación controlada sin descuento de stock, rechazo <code>400</code> ante discrepancia de importe, captura verificada con descuento atómico e idempotencia (<code>idempotent: true</code> con una sola llamada a captura).
+7. Máquina de estados Kanban (<code>PAID -&gt; PREPARING -&gt; SHIPPED -&gt; DELIVERED</code>), rechazo <code>400</code> ante saltos ilegales o pedidos no pagados, generación de guía y ajuste de stock administrativo.
+8. WebSockets autenticados: rechazo de handshake sin JWT, entrega en tiempo real de <code>order:created</code> al admin y <code>order:updated</code> / <code>order:statusChanged</code> exclusivamente al cliente propietario (0 fugas a terceros).</p>
+<h3>6.2. Resultados de Pruebas Funcionales en Vivo con TestSprite</h3>
+<p>Se cargó <code>PRD.md</code> en <strong>TestSprite</strong> bajo modalidad <strong>Live Web App</strong> (<code>Frontend UI</code>) sobre <code>https://lab4-production-052fb297.up.railway.app</code> con cuenta de prueba <code>cliente@libroya.com</code>. En la ejecución <strong><code>Run: Nov 25, 12:52 AM</code></strong> (ID <code>0ca656c3-b327-4107-b461-a46cc7c60593</code>) se obtuvieron los siguientes resultados:</p>
+<ul>
+<li><strong>Tasa de éxito inicial:</strong> <strong>83%</strong> (<code>10</code> aprobadas · <code>2</code> fallidas · <code>0</code> bloqueadas · <code>12</code> totales).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Caso de Prueba (TestSprite)</th>
+<th>Categoría</th>
+<th>Estado</th>
+<th>Observación / Diagnóstico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CATALOG-001</code></td>
+<td>Text search filters the catalog by author, title and ISBN</td>
+<td>Catalog</td>
+<td><strong>Failed</strong></td>
+<td><strong>Falso positivo (Test problem):</strong> Búsqueda por autor, título, ISBN, sin resultados y <code>"Limpiar filtros"</code> funcionaron; la aserción final no scrolleó para ver el último libro del catálogo.</td>
+</tr>
+<tr>
+<td><code>CATALOG-002</code></td>
+<td>Category, format and "Solo con stock" filters narrow the catalog</td>
+<td>Catalog</td>
+<td><strong>Passed</strong></td>
+<td>Filtros combinados coherentes con disponibilidad real.</td>
+</tr>
+<tr>
+<td><code>CATALOG-003</code></td>
+<td>Sold-out books block purchase and low-stock books show a warning</td>
+<td>Catalog</td>
+<td><strong>Failed</strong></td>
+<td><strong>Defecto real UI (Prioridad Alta):</strong> El badge largo <code>"Edición Impresa + eBook"</code> en <code>top-3</code> solapaba el aviso de stock en <code>top-3</code> y ocultaba el número (<code>"Últimas uds."</code> en vez de <code>"Últimas 3 uds."</code>). <strong>Corregido.</strong></td>
+</tr>
+<tr>
+<td><code>CATALOG-004</code></td>
+<td>Book details modal shows full data and adds the book to the cart</td>
+<td>Catalog</td>
+<td><strong>Passed</strong></td>
+<td>Modal despliega metadatos completos y añade correctamente al carrito.</td>
+</tr>
+<tr>
+<td><code>CART-SHIPPI-001</code></td>
+<td>Cart recalculates subtotal and total for quantities and shipping methods</td>
+<td>Cart &amp; shipping</td>
+<td><strong>Passed</strong></td>
+<td>Cálculo exacto de subtotal y tarifas de envío.</td>
+</tr>
+<tr>
+<td><code>CART-SHIPPI-002</code></td>
+<td>Cart quantity cannot exceed the available stock</td>
+<td>Cart &amp; shipping</td>
+<td><strong>Passed</strong></td>
+<td>Tope máximo respetado según stock del backend.</td>
+</tr>
+<tr>
+<td><code>ORDERS-CH-001</code></td>
+<td>Confirming the cart creates a pending order with a server-calculated checkout</td>
+<td>Orders &amp; checkout</td>
+<td><strong>Passed</strong></td>
+<td>Orden creada con total recalculado y vista checkout operativa.</td>
+</tr>
+<tr>
+<td><code>ORDERS-CH-002</code></td>
+<td>Order cannot be confirmed without a delivery address</td>
+<td>Orders &amp; checkout</td>
+<td><strong>Passed</strong></td>
+<td>Validación bloquea direcciones vacías.</td>
+</tr>
+<tr>
+<td><code>ORDERS-CH-003</code></td>
+<td>A pending order can be reopened from My orders to retry payment</td>
+<td>Orders &amp; checkout</td>
+<td><strong>Passed</strong></td>
+<td>Recuperación fluida desde <code>/pedidos</code> hacia <code>/checkout/[orderId]</code>.</td>
+</tr>
+<tr>
+<td><code>ACCESS-ROL-001</code></td>
+<td>Customer opening the admin console sees an access-denied screen</td>
+<td>Access &amp; roles</td>
+<td><strong>Passed</strong></td>
+<td>Pantalla <code>Acceso denegado (403)</code> verificada para rol cliente.</td>
+</tr>
+<tr>
+<td><code>ACCESS-ROL-002</code></td>
+<td>Sign-in with wrong credentials shows the generic error</td>
+<td>Access &amp; roles</td>
+<td><strong>Passed</strong></td>
+<td>Mensaje seguro <code>"Credenciales inválidas."</code>.</td>
+</tr>
+<tr>
+<td><code>NAVIGATION-001</code></td>
+<td>Reloading internal pages keeps the page and the session</td>
+<td>Navigation &amp; session</td>
+<td><strong>Passed</strong></td>
+<td>Persistencia de rutas y sesión JWT tras recarga.</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3. Corrección del Defecto <code>CATALOG-003</code> y Decisión de Liberación</h3>
+<ul>
+<li><strong>Corrección implementada (<code>commit 4562259</code>):</strong> En <code>web/src/components/BookCard.tsx</code>, se reubicó la insignia de stock a la esquina inferior derecha (<code>bottom-3 right-3</code>) con <code>whitespace-nowrap</code>, <code>data-testid="stock-badge"</code> y renderizado en un único nodo de texto <code>{`Últimas ${book.stock} uds.`}</code>, evitando colisión visual con formatos extensos como <code>"Edición Impresa + eBook"</code>. Se compiló (<code>npm --prefix web run build</code>), se subió a GitHub y se verificó visualmente en el despliegue actualizado de Railway (ver Figura <code>02_catalogo_completo.png</code>).</li>
+<li><strong>Limitaciones conocidas:</strong> La ejecución automatizada en TestSprite cubrió el entorno <code>default</code> (<code>cliente@libroya.com</code>), quedando la captura interactiva dentro del popup externo de PayPal y el tablero Kanban administrativo verificados mediante la suite Vitest (8/8) y pruebas autenticadas directas en el entorno desplegado de Railway.</li>
+<li><strong>Decisión de liberación:</strong> <strong>Aprobada para entrega académica</strong>, con 100% de pruebas de backend aprobadas, defecto UI crítico resuelto y verificado en producción y 0 secretos expuestos.</li>
+</ul>
+<hr />
+<h2>7. EVIDENCIA FOTOGRÁFICA DEL SISTEMA DESPLEGADO</h2>
+<h3>7.1. Página Principal Pública (<code>/</code>)</h3>
+<p>Presentación de LibroYa en Railway con acceso directo al catálogo, inicio de sesión, registro y títulos destacados cargados desde MongoDB Atlas.</p>
+<p><img alt="Landing Principal LibroYa" src="imagenes_informe_lab4/01_landing_principal.png" /></p>
+<hr />
+<h3>7.2. Catálogo Público con Corrección <code>CATALOG-003</code> Verificada (<code>/catalogo</code>)</h3>
+<p>Visualización del catálogo en vivo tras el despliegue del commit <code>4562259</code>. Se observa claramente la insignia <code>"Últimas 3 uds."</code> en la esquina inferior derecha de <em>MongoDB Atlas y Modelado Orientado a Eventos</em> sin solaparse con <code>"Edición Impresa + eBook"</code>, junto con las insignias <code>"Stock: 16"</code>, <code>"Stock: 9"</code> y el inicio de <em>Algoritmos del Sur</em> (<code>Edición Impresa + eBook</code>).</p>
+<p><img alt="Catálogo Completo Corregido" src="imagenes_informe_lab4/02_catalogo_completo.png" /></p>
+<hr />
+<h3>7.3. Filtros por Categoría y Modal de Detalles del Libro</h3>
+<p>Filtrado reactivo por categoría <code>Arquitectura</code> junto con el modal de especificaciones técnicas (ISBN, páginas, idioma, año y stock disponible).</p>
+<p><img alt="Filtro y Modal de Detalles" src="imagenes_informe_lab4/03_catalogo_filtro_modal.png" /></p>
+<hr />
+<h3>7.4. Inicio de Sesión (<code>/login</code>)</h3>
+<p>Formulario de autenticación con verificación JWT y panel de cuentas Sandbox de demostración diferenciadas por rol.</p>
+<p><img alt="Inicio de Sesión" src="imagenes_informe_lab4/04_login_acceso.png" /></p>
+<hr />
+<h3>7.5. Carrito de Compras, Modalidad de Envío y Dirección (<code>/carrito</code>)</h3>
+<p>Gestión de cantidades limitada por stock real, selección de modalidad de entrega (<code>Digital Instantáneo</code>, <code>Estándar</code>, <code>Express</code>) y formulario de dirección validado antes de enviar <code>POST /api/orders</code>.</p>
+<p><img alt="Carrito y Datos de Envío" src="imagenes_informe_lab4/05_carrito_envio.png" /></p>
+<hr />
+<h3>7.6. Checkout Seguro y Pasarela PayPal Sandbox (<code>/checkout/[orderId]</code>)</h3>
+<p>Vista autoritativa donde el total es recalculado por el backend y se renderizan los botones oficiales del SDK de <strong>PayPal Sandbox</strong> listos para aprobación y captura verificada en el servidor.</p>
+<p><img alt="Checkout PayPal Sandbox" src="imagenes_informe_lab4/06_checkout_paypal.png" /></p>
+<hr />
+<h3>7.7. Historial del Cliente y Seguimiento en Tiempo Real (<code>/pedidos</code>)</h3>
+<p>Lista de pedidos exclusivos del usuario autenticado mostrando el indicador <code>"En vivo"</code> (conexión WSS Socket.IO activa), barra de progreso por etapas (<code>Pendiente -&gt; En preparación -&gt; Enviado -&gt; Entregado</code>) y descarga de certificado de licencia digital.</p>
+<p><img alt="Mis Pedidos Cliente" src="imagenes_informe_lab4/07_mis_pedidos_cliente.png" /></p>
+<hr />
+<h3>7.8. Control de Acceso por Roles: Bloqueo a Cliente (<code>/admin</code>)</h3>
+<p>Evidencia de protección en interfaz y servidor: al ingresar un usuario con rol <code>cliente</code> a <code>/admin</code>, el sistema deniega el acceso mostrando <code>Acceso denegado (403)</code>.</p>
+<p><img alt="Acceso Denegado 403" src="imagenes_informe_lab4/08_acceso_denegado_403.png" /></p>
+<hr />
+<h3>7.9. Consola de Administración: Tablero Kanban de Envíos (<code>/admin</code>)</h3>
+<p>Vista exclusiva del rol <code>administrador</code> conectada en tiempo real a la sala <code>admin:shipments</code> (<code>En vivo</code>), con las cuatro columnas del flujo logístico (<code>Pendiente</code>, <code>En preparación</code>, <code>Enviado</code> con asignación de guía y <code>Entregado</code>).</p>
+<p><img alt="Tablero Kanban de Envíos" src="imagenes_informe_lab4/09_admin_kanban_envios.png" /></p>
+<hr />
+<h3>7.10. Consola de Administración: Gestión de Catálogo y Stock (<code>/admin</code>)</h3>
+<p>Panel de inventario en vivo con métricas agregadas (<code>Total títulos</code>, <code>Stock bajo</code>, <code>Agotados</code>), controles rápidos <code>-1 / +1 / +5</code>, pausado/activación de títulos y creación de nuevos libros.</p>
+<p><img alt="Gestión de Catálogo y Stock" src="imagenes_informe_lab4/10_admin_catalogo_stock.png" /></p>
+<hr />
+<h3>7.11. Verificación de Disponibilidad del Backend (<code>/health</code>)</h3>
+<p>Respuesta pública en vivo de <code>https://server-production-75813d16.up.railway.app/health</code> confirmando servicio operativo y conexión estable a MongoDB Atlas (<code>"db": "connected"</code>) sin exponer secretos.</p>
+<p><img alt="Healthcheck Backend Railway" src="imagenes_informe_lab4/11_backend_health_railway.png" /></p>
+<hr />
+<h3>7.12. Evidencia de Ejecución en TestSprite (<code>Live Web App</code>)</h3>
+<p>Panel de resultados de <strong>TestSprite</strong> (<code>Run: Nov 25, 12:52 AM</code>) mostrando el resumen de ejecución (<code>83% Pass Rate</code>, <code>10 Passed</code>, <code>2 Failed</code>, <code>0 Blocked</code>, <code>12 Total</code>) y el diagnóstico que originó la corrección de <code>CATALOG-003</code>.</p>
+<p><img alt="Resultados TestSprite" src="imagenes_informe_lab4/12_testsprite_ejecucion.png" /></p>
+<hr />
+<h2>8. REFLEXIÓN INDIVIDUAL</h2>
+<ul>
+<li><strong>Qué generó la IA:</strong> La Inteligencia Artificial aceleró la estructuración inicial del monorepo (<code>server/</code> y <code>web/</code>), la escritura de esquemas Mongoose con Zod, el diseño de las vistas responsive en Tailwind CSS, la generación de portadas vectoriales locales, la suite de pruebas en Vitest y la redacción de <code>PRD.md</code> y <code>README.md</code>.</li>
+<li><strong>Qué verificó manualmente el equipo:</strong> Se auditó que ninguna credencial privada (<code>MONGODB_URI</code>, <code>JWT_SECRET</code>, <code>PAYPAL_CLIENT_SECRET</code>) quedara en <code>web/</code>, <code>NEXT_PUBLIC_*</code>, <code>PRD.md</code> ni en el historial de Git; se comprobó la conexión real contra MongoDB Atlas, la creación real de órdenes en PayPal Sandbox, la ejecución completa de los 8 tests de backend y la reproducción manual de los fallos reportados por TestSprite antes y después del despliegue en Railway.</li>
+<li><strong>Decisiones tomadas manualmente:</strong></li>
+<li>Reemplazar el dominio de ejemplo (<em>PlatoYa</em>) por el comercio electrónico de libros electrónicos, gestión de catálogo/stock y envíos (<strong>LibroYa</strong>) conforme a la Sección 13 de la guía.</li>
+<li>Enviar el JWT por <code>Authorization: Bearer</code> además de cookie <code>httpOnly</code> para garantizar compatibilidad entre subdominios distintos en Railway sin depender de cookies de terceros.</li>
+<li>Sustituir el índice <code>text</code> por defecto de MongoDB por un índice compuesto para evitar el choque con el campo <code>language: "Español"</code>.</li>
+<li>Reubicar la insignia de stock en <code>BookCard.tsx</code> tras el hallazgo <code>CATALOG-003</code> de TestSprite, priorizando legibilidad en tarjetas con formatos extensos.</li>
+</ul>
+<hr />
+<h2>9. CONCLUSIONES Y REFERENCIAS BIBLIOGRÁFICAS</h2>
+<h3>Conclusiones</h3>
+<ol>
+<li>El trabajo guiado por arquitectura previa y límites de confianza permitió entregar una aplicación full-stack segura donde las operaciones críticas (precios, inventario, captura de PayPal, roles y transiciones logísticas) residen íntegramente en el backend.</li>
+<li>La integración conjunta de <strong>Express + Socket.IO + MongoDB Atlas + PayPal Sandbox</strong> demostró cómo mantener sincronizados en tiempo real el inventario del catálogo, el historial del comprador y el tablero Kanban administrativo sin recurrir a <em>polling</em>.</li>
+<li>Combinar pruebas de integración deterministas en backend (<strong>Vitest 8/8</strong>) con pruebas E2E en la nube (<strong>TestSprite</strong>) resultó altamente complementario: TestSprite detectó un problema real de superposición visual (<code>CATALOG-003</code>) que no era visible en pruebas de API puras.</li>
+</ol>
+<h3>Referencias Bibliográficas</h3>
+<ol>
+<li><strong>Guía de Laboratorio UdeA (2026):</strong> <em>Generación de aplicaciones con inteligencia artificial (Fundamentos en S.I.)</em>. Profesor Diego José Luis Botia. Universidad de Antioquia.</li>
+<li><strong>Next.js Documentation:</strong> <em>App Router Architecture and Production Deployment</em>. Recuperado de: https://nextjs.org/docs</li>
+<li><strong>MongoDB Atlas Documentation:</strong> <em>Network Access, Drivers &amp; Mongoose ODM</em>. Recuperado de: https://www.mongodb.com/docs/atlas/</li>
+<li><strong>PayPal Developer Documentation:</strong> <em>Orders v2 API &amp; Sandbox Testing</em>. Recuperado de: https://developer.paypal.com/docs/</li>
+<li><strong>Socket.IO v4 Documentation:</strong> <em>Server Middleware, Rooms and Reconnection</em>. Recuperado de: https://socket.io/docs/v4/</li>
+<li><strong>Railway Documentation:</strong> <em>Deploying Monorepos and Multi-Service Projects</em>. Recuperado de: https://docs.railway.com/</li>
+<li><strong>TestSprite Documentation:</strong> <em>Live Web App Testing with PRD</em>. Recuperado de: https://docs.testsprite.com/</li>
+</ol>
+</body>
+</html>
