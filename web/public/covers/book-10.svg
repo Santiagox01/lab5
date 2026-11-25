@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs><linearGradient id="g10" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1c1917"/><stop offset="100%" stop-color="#44403c"/></linearGradient></defs>
+  <rect width="400" height="300" fill="url(#g10)"/>
+  <circle cx="330" cy="65" r="95" fill="#fbbf24" fill-opacity="0.14"/>
+  <circle cx="330" cy="65" r="55" fill="none" stroke="#fbbf24" stroke-opacity="0.4" stroke-width="1.5"/>
+  <rect x="28" y="28" width="344" height="244" rx="12" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+  <text x="46" y="64" font-family="Georgia, serif" font-size="12" letter-spacing="3" fill="#fbbf24">LIBROYA EDICIONES · 10</text>
+  <text x="46" y="138" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#F5F0E8">Algoritmos</text>
+  <text x="46" y="174" font-family="Georgia, serif" font-size="24" fill="#E7E5E4">del Sur</text>
+  <line x1="46" y1="206" x2="140" y2="206" stroke="#fbbf24" stroke-width="2.5"/>
+  <text x="46" y="238" font-family="Arial, sans-serif" font-size="14" fill="#D6D3D1">Daniela Echeverri</text>
+</svg>

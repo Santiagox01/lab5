@@ -1,0 +1,17 @@
+{
+  "name": "libroya-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LibroYa — Comercio electrónico de libros electrónicos, gestión de catálogo, stock y envíos en tiempo real",
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c yellow,cyan \"npm --prefix server run dev\" \"npm --prefix web run dev\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:web": "npm --prefix web run dev",
+    "build": "npm --prefix server run build && npm --prefix web run build",
+    "test": "npm --prefix server test",
+    "seed": "npm --prefix server run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
