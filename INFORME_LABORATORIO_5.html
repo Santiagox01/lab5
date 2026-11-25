@@ -166,7 +166,7 @@ blockquote {
 <strong>Profesor:</strong> Diego José Luis Botia V.<br />
 <strong>Estudiante:</strong> Santiago Jaramillo<br />
 <strong>Fecha:</strong> 24 de noviembre de 2026<br />
-<strong>Repositorio GitHub:</strong> <a href="https://github.com/Santiagox01/lab4">https://github.com/Santiagox01/lab4</a><br />
+<strong>Repositorio GitHub:</strong> <a href="https://github.com/Santiagox01/lab5">https://github.com/Santiagox01/lab5</a><br />
 <strong>Frontend desplegado (Railway):</strong> <a href="https://lab4-production-052fb297.up.railway.app">https://lab4-production-052fb297.up.railway.app</a><br />
 <strong>Backend desplegado (Railway):</strong> <a href="https://server-production-75813d16.up.railway.app/health">https://server-production-75813d16.up.railway.app/health</a></p>
 <hr />
@@ -184,9 +184,9 @@ blockquote {
 1. <strong>El navegador nunca decide precios ni estados pagados:</strong> Al confirmar una compra, el frontend envía exclusivamente identificadores de libros (<code>bookId</code>), cantidades enteras (<code>quantity</code>), dirección de entrega y método de envío (<code>DIGITAL_INSTANT</code>, <code>STANDARD</code> o <code>EXPRESS</code>). El servidor consulta los precios unitarios y el inventario vigente en MongoDB Atlas y recalcula <code>subtotal</code>, <code>shippingCost</code> y <code>total</code>.
 2. <strong>Validación en backend de PayPal Sandbox:</strong> Solo el servidor posee <code>PAYPAL_CLIENT_SECRET</code>. Tras la aprobación del comprador en el SDK de PayPal, el cliente invoca <code>POST /api/payments/paypal/capture</code>, donde el backend consulta directamente a PayPal v2 Orders API, verifica <code>status === "COMPLETED"</code>, moneda <code>USD</code>, importe coincidente y <code>custom_id</code>, descuenta el inventario de forma atómica y promueve el pedido a <code>PAID</code>.
 3. <strong>WebSockets en el mismo proceso del backend:</strong> Al alojar <strong>Socket.IO</strong> dentro del servidor Express (<code>server/src/socket/io.ts</code>), cada mutación de pago, cambio de estado logístico o ajuste de stock emite notificaciones autenticadas en milisegundos sin requerir consultas continuas (<em>polling</em>) ni infraestructura de mensajería adicional.</p>
-<p><img alt="Diagrama de Arquitectura y Máquina de Estados de LibroYa" src="imagenes_informe_lab4/00_arquitectura_sistema.png" /></p>
+<p><img alt="Diagrama de Arquitectura y Máquina de Estados de LibroYa" src="imagenes_informe_lab5/00_arquitectura_sistema.png" /></p>
 <h3>2.2. Estructura del Monorepo</h3>
-<pre><code class="language-text">lab4/
+<pre><code class="language-text">lab5/
 ├── package.json              # Scripts globales (dev, build, test, seed)
 ├── .gitignore                # Excluye .env, .env.local, node_modules, dist, .next
 ├── .env.example              # Referencia raíz sin secretos
@@ -534,51 +534,51 @@ blockquote {
 <h2>7. EVIDENCIA FOTOGRÁFICA DEL SISTEMA DESPLEGADO</h2>
 <h3>7.1. Página Principal Pública (<code>/</code>)</h3>
 <p>Presentación de LibroYa en Railway con acceso directo al catálogo, inicio de sesión, registro y títulos destacados cargados desde MongoDB Atlas.</p>
-<p><img alt="Landing Principal LibroYa" src="imagenes_informe_lab4/01_landing_principal.png" /></p>
+<p><img alt="Landing Principal LibroYa" src="imagenes_informe_lab5/01_landing_principal.png" /></p>
 <hr />
 <h3>7.2. Catálogo Público con Corrección <code>CATALOG-003</code> Verificada (<code>/catalogo</code>)</h3>
 <p>Visualización del catálogo en vivo tras el despliegue del commit <code>4562259</code>. Se observa claramente la insignia <code>"Últimas 3 uds."</code> en la esquina inferior derecha de <em>MongoDB Atlas y Modelado Orientado a Eventos</em> sin solaparse con <code>"Edición Impresa + eBook"</code>, junto con las insignias <code>"Stock: 16"</code>, <code>"Stock: 9"</code> y el inicio de <em>Algoritmos del Sur</em> (<code>Edición Impresa + eBook</code>).</p>
-<p><img alt="Catálogo Completo Corregido" src="imagenes_informe_lab4/02_catalogo_completo.png" /></p>
+<p><img alt="Catálogo Completo Corregido" src="imagenes_informe_lab5/02_catalogo_completo.png" /></p>
 <hr />
 <h3>7.3. Filtros por Categoría y Modal de Detalles del Libro</h3>
 <p>Filtrado reactivo por categoría <code>Arquitectura</code> junto con el modal de especificaciones técnicas (ISBN, páginas, idioma, año y stock disponible).</p>
-<p><img alt="Filtro y Modal de Detalles" src="imagenes_informe_lab4/03_catalogo_filtro_modal.png" /></p>
+<p><img alt="Filtro y Modal de Detalles" src="imagenes_informe_lab5/03_catalogo_filtro_modal.png" /></p>
 <hr />
 <h3>7.4. Inicio de Sesión (<code>/login</code>)</h3>
 <p>Formulario de autenticación con verificación JWT y panel de cuentas Sandbox de demostración diferenciadas por rol.</p>
-<p><img alt="Inicio de Sesión" src="imagenes_informe_lab4/04_login_acceso.png" /></p>
+<p><img alt="Inicio de Sesión" src="imagenes_informe_lab5/04_login_acceso.png" /></p>
 <hr />
 <h3>7.5. Carrito de Compras, Modalidad de Envío y Dirección (<code>/carrito</code>)</h3>
 <p>Gestión de cantidades limitada por stock real, selección de modalidad de entrega (<code>Digital Instantáneo</code>, <code>Estándar</code>, <code>Express</code>) y formulario de dirección validado antes de enviar <code>POST /api/orders</code>.</p>
-<p><img alt="Carrito y Datos de Envío" src="imagenes_informe_lab4/05_carrito_envio.png" /></p>
+<p><img alt="Carrito y Datos de Envío" src="imagenes_informe_lab5/05_carrito_envio.png" /></p>
 <hr />
 <h3>7.6. Checkout Seguro y Pasarela PayPal Sandbox (<code>/checkout/[orderId]</code>)</h3>
 <p>Vista autoritativa donde el total es recalculado por el backend y se renderizan los botones oficiales del SDK de <strong>PayPal Sandbox</strong> listos para aprobación y captura verificada en el servidor.</p>
-<p><img alt="Checkout PayPal Sandbox" src="imagenes_informe_lab4/06_checkout_paypal.png" /></p>
+<p><img alt="Checkout PayPal Sandbox" src="imagenes_informe_lab5/06_checkout_paypal.png" /></p>
 <hr />
 <h3>7.7. Historial del Cliente y Seguimiento en Tiempo Real (<code>/pedidos</code>)</h3>
 <p>Lista de pedidos exclusivos del usuario autenticado mostrando el indicador <code>"En vivo"</code> (conexión WSS Socket.IO activa), barra de progreso por etapas (<code>Pendiente -&gt; En preparación -&gt; Enviado -&gt; Entregado</code>) y descarga de certificado de licencia digital.</p>
-<p><img alt="Mis Pedidos Cliente" src="imagenes_informe_lab4/07_mis_pedidos_cliente.png" /></p>
+<p><img alt="Mis Pedidos Cliente" src="imagenes_informe_lab5/07_mis_pedidos_cliente.png" /></p>
 <hr />
 <h3>7.8. Control de Acceso por Roles: Bloqueo a Cliente (<code>/admin</code>)</h3>
 <p>Evidencia de protección en interfaz y servidor: al ingresar un usuario con rol <code>cliente</code> a <code>/admin</code>, el sistema deniega el acceso mostrando <code>Acceso denegado (403)</code>.</p>
-<p><img alt="Acceso Denegado 403" src="imagenes_informe_lab4/08_acceso_denegado_403.png" /></p>
+<p><img alt="Acceso Denegado 403" src="imagenes_informe_lab5/08_acceso_denegado_403.png" /></p>
 <hr />
 <h3>7.9. Consola de Administración: Tablero Kanban de Envíos (<code>/admin</code>)</h3>
 <p>Vista exclusiva del rol <code>administrador</code> conectada en tiempo real a la sala <code>admin:shipments</code> (<code>En vivo</code>), con las cuatro columnas del flujo logístico (<code>Pendiente</code>, <code>En preparación</code>, <code>Enviado</code> con asignación de guía y <code>Entregado</code>).</p>
-<p><img alt="Tablero Kanban de Envíos" src="imagenes_informe_lab4/09_admin_kanban_envios.png" /></p>
+<p><img alt="Tablero Kanban de Envíos" src="imagenes_informe_lab5/09_admin_kanban_envios.png" /></p>
 <hr />
 <h3>7.10. Consola de Administración: Gestión de Catálogo y Stock (<code>/admin</code>)</h3>
 <p>Panel de inventario en vivo con métricas agregadas (<code>Total títulos</code>, <code>Stock bajo</code>, <code>Agotados</code>), controles rápidos <code>-1 / +1 / +5</code>, pausado/activación de títulos y creación de nuevos libros.</p>
-<p><img alt="Gestión de Catálogo y Stock" src="imagenes_informe_lab4/10_admin_catalogo_stock.png" /></p>
+<p><img alt="Gestión de Catálogo y Stock" src="imagenes_informe_lab5/10_admin_catalogo_stock.png" /></p>
 <hr />
 <h3>7.11. Verificación de Disponibilidad del Backend (<code>/health</code>)</h3>
 <p>Respuesta pública en vivo de <code>https://server-production-75813d16.up.railway.app/health</code> confirmando servicio operativo y conexión estable a MongoDB Atlas (<code>"db": "connected"</code>) sin exponer secretos.</p>
-<p><img alt="Healthcheck Backend Railway" src="imagenes_informe_lab4/11_backend_health_railway.png" /></p>
+<p><img alt="Healthcheck Backend Railway" src="imagenes_informe_lab5/11_backend_health_railway.png" /></p>
 <hr />
 <h3>7.12. Evidencia de Ejecución en TestSprite (<code>Live Web App</code>)</h3>
 <p>Panel de resultados de <strong>TestSprite</strong> (<code>Run: Nov 25, 12:52 AM</code>) mostrando el resumen de ejecución (<code>83% Pass Rate</code>, <code>10 Passed</code>, <code>2 Failed</code>, <code>0 Blocked</code>, <code>12 Total</code>) y el diagnóstico que originó la corrección de <code>CATALOG-003</code>.</p>
-<p><img alt="Resultados TestSprite" src="imagenes_informe_lab4/12_testsprite_ejecucion.png" /></p>
+<p><img alt="Resultados TestSprite" src="imagenes_informe_lab5/12_testsprite_ejecucion.png" /></p>
 <hr />
 <h2>8. REFLEXIÓN INDIVIDUAL</h2>
 <ul>

@@ -120,7 +120,7 @@ El servidor valida el JWT en el handshake (`auth.token`, header `Authorization` 
    - `web/.env.example` → `web/.env.local`
 2. Nunca publiques `MONGODB_URI`, `JWT_SECRET` ni `PAYPAL_CLIENT_SECRET` en `web/.env.local` ni en variables `NEXT_PUBLIC_*`.
 
-### Comandos principales (desde la raíz `lab4/`)
+### Comandos principales (desde la raíz `lab5/`)
 ```powershell
 # Instalar dependencias (raíz, backend y frontend)
 npm install
@@ -148,7 +148,7 @@ npm run dev
 
 ## 6. Despliegue en Railway (Dos Servicios)
 
-1. Crea un proyecto en [Railway](https://railway.com/) conectado al repositorio GitHub `Santiagox01/lab4`.
+1. Crea un proyecto en [Railway](https://railway.com/) conectado al repositorio GitHub `Santiagox01/lab5`.
 2. **Servicio 1 — Backend (`server`):**
    - **Root Directory:** `/server`
    - **Build Command:** `npm install && npm run build` (detectado en `server/railway.json`)

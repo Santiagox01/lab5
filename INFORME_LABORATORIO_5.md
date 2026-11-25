@@ -7,7 +7,7 @@
 **Profesor:** Diego José Luis Botia V.  
 **Estudiante:** Santiago Jaramillo  
 **Fecha:** 24 de noviembre de 2026  
-**Repositorio GitHub:** [https://github.com/Santiagox01/lab4](https://github.com/Santiagox01/lab4)  
+**Repositorio GitHub:** [https://github.com/Santiagox01/lab5](https://github.com/Santiagox01/lab5)  
 **Frontend desplegado (Railway):** [https://lab4-production-052fb297.up.railway.app](https://lab4-production-052fb297.up.railway.app)  
 **Backend desplegado (Railway):** [https://server-production-75813d16.up.railway.app/health](https://server-production-75813d16.up.railway.app/health)
 
@@ -33,11 +33,11 @@ La generación de software asistida por IA exige definir previamente contratos d
 2. **Validación en backend de PayPal Sandbox:** Solo el servidor posee `PAYPAL_CLIENT_SECRET`. Tras la aprobación del comprador en el SDK de PayPal, el cliente invoca `POST /api/payments/paypal/capture`, donde el backend consulta directamente a PayPal v2 Orders API, verifica `status === "COMPLETED"`, moneda `USD`, importe coincidente y `custom_id`, descuenta el inventario de forma atómica y promueve el pedido a `PAID`.
 3. **WebSockets en el mismo proceso del backend:** Al alojar **Socket.IO** dentro del servidor Express (`server/src/socket/io.ts`), cada mutación de pago, cambio de estado logístico o ajuste de stock emite notificaciones autenticadas en milisegundos sin requerir consultas continuas (*polling*) ni infraestructura de mensajería adicional.
 
-![Diagrama de Arquitectura y Máquina de Estados de LibroYa](imagenes_informe_lab4/00_arquitectura_sistema.png)
+![Diagrama de Arquitectura y Máquina de Estados de LibroYa](imagenes_informe_lab5/00_arquitectura_sistema.png)
 
 ### 2.2. Estructura del Monorepo
 ```text
-lab4/
+lab5/
 ├── package.json              # Scripts globales (dev, build, test, seed)
 ├── .gitignore                # Excluye .env, .env.local, node_modules, dist, .next
 ├── .env.example              # Referencia raíz sin secretos
@@ -188,84 +188,84 @@ Se cargó `PRD.md` en **TestSprite** bajo modalidad **Live Web App** (`Frontend 
 ### 7.1. Página Principal Pública (`/`)
 Presentación de LibroYa en Railway con acceso directo al catálogo, inicio de sesión, registro y títulos destacados cargados desde MongoDB Atlas.
 
-![Landing Principal LibroYa](imagenes_informe_lab4/01_landing_principal.png)
+![Landing Principal LibroYa](imagenes_informe_lab5/01_landing_principal.png)
 
 ---
 
 ### 7.2. Catálogo Público con Corrección `CATALOG-003` Verificada (`/catalogo`)
 Visualización del catálogo en vivo tras el despliegue del commit `4562259`. Se observa claramente la insignia `"Últimas 3 uds."` en la esquina inferior derecha de *MongoDB Atlas y Modelado Orientado a Eventos* sin solaparse con `"Edición Impresa + eBook"`, junto con las insignias `"Stock: 16"`, `"Stock: 9"` y el inicio de *Algoritmos del Sur* (`Edición Impresa + eBook`).
 
-![Catálogo Completo Corregido](imagenes_informe_lab4/02_catalogo_completo.png)
+![Catálogo Completo Corregido](imagenes_informe_lab5/02_catalogo_completo.png)
 
 ---
 
 ### 7.3. Filtros por Categoría y Modal de Detalles del Libro
 Filtrado reactivo por categoría `Arquitectura` junto con el modal de especificaciones técnicas (ISBN, páginas, idioma, año y stock disponible).
 
-![Filtro y Modal de Detalles](imagenes_informe_lab4/03_catalogo_filtro_modal.png)
+![Filtro y Modal de Detalles](imagenes_informe_lab5/03_catalogo_filtro_modal.png)
 
 ---
 
 ### 7.4. Inicio de Sesión (`/login`)
 Formulario de autenticación con verificación JWT y panel de cuentas Sandbox de demostración diferenciadas por rol.
 
-![Inicio de Sesión](imagenes_informe_lab4/04_login_acceso.png)
+![Inicio de Sesión](imagenes_informe_lab5/04_login_acceso.png)
 
 ---
 
 ### 7.5. Carrito de Compras, Modalidad de Envío y Dirección (`/carrito`)
 Gestión de cantidades limitada por stock real, selección de modalidad de entrega (`Digital Instantáneo`, `Estándar`, `Express`) y formulario de dirección validado antes de enviar `POST /api/orders`.
 
-![Carrito y Datos de Envío](imagenes_informe_lab4/05_carrito_envio.png)
+![Carrito y Datos de Envío](imagenes_informe_lab5/05_carrito_envio.png)
 
 ---
 
 ### 7.6. Checkout Seguro y Pasarela PayPal Sandbox (`/checkout/[orderId]`)
 Vista autoritativa donde el total es recalculado por el backend y se renderizan los botones oficiales del SDK de **PayPal Sandbox** listos para aprobación y captura verificada en el servidor.
 
-![Checkout PayPal Sandbox](imagenes_informe_lab4/06_checkout_paypal.png)
+![Checkout PayPal Sandbox](imagenes_informe_lab5/06_checkout_paypal.png)
 
 ---
 
 ### 7.7. Historial del Cliente y Seguimiento en Tiempo Real (`/pedidos`)
 Lista de pedidos exclusivos del usuario autenticado mostrando el indicador `"En vivo"` (conexión WSS Socket.IO activa), barra de progreso por etapas (`Pendiente -> En preparación -> Enviado -> Entregado`) y descarga de certificado de licencia digital.
 
-![Mis Pedidos Cliente](imagenes_informe_lab4/07_mis_pedidos_cliente.png)
+![Mis Pedidos Cliente](imagenes_informe_lab5/07_mis_pedidos_cliente.png)
 
 ---
 
 ### 7.8. Control de Acceso por Roles: Bloqueo a Cliente (`/admin`)
 Evidencia de protección en interfaz y servidor: al ingresar un usuario con rol `cliente` a `/admin`, el sistema deniega el acceso mostrando `Acceso denegado (403)`.
 
-![Acceso Denegado 403](imagenes_informe_lab4/08_acceso_denegado_403.png)
+![Acceso Denegado 403](imagenes_informe_lab5/08_acceso_denegado_403.png)
 
 ---
 
 ### 7.9. Consola de Administración: Tablero Kanban de Envíos (`/admin`)
 Vista exclusiva del rol `administrador` conectada en tiempo real a la sala `admin:shipments` (`En vivo`), con las cuatro columnas del flujo logístico (`Pendiente`, `En preparación`, `Enviado` con asignación de guía y `Entregado`).
 
-![Tablero Kanban de Envíos](imagenes_informe_lab4/09_admin_kanban_envios.png)
+![Tablero Kanban de Envíos](imagenes_informe_lab5/09_admin_kanban_envios.png)
 
 ---
 
 ### 7.10. Consola de Administración: Gestión de Catálogo y Stock (`/admin`)
 Panel de inventario en vivo con métricas agregadas (`Total títulos`, `Stock bajo`, `Agotados`), controles rápidos `-1 / +1 / +5`, pausado/activación de títulos y creación de nuevos libros.
 
-![Gestión de Catálogo y Stock](imagenes_informe_lab4/10_admin_catalogo_stock.png)
+![Gestión de Catálogo y Stock](imagenes_informe_lab5/10_admin_catalogo_stock.png)
 
 ---
 
 ### 7.11. Verificación de Disponibilidad del Backend (`/health`)
 Respuesta pública en vivo de `https://server-production-75813d16.up.railway.app/health` confirmando servicio operativo y conexión estable a MongoDB Atlas (`"db": "connected"`) sin exponer secretos.
 
-![Healthcheck Backend Railway](imagenes_informe_lab4/11_backend_health_railway.png)
+![Healthcheck Backend Railway](imagenes_informe_lab5/11_backend_health_railway.png)
 
 ---
 
 ### 7.12. Evidencia de Ejecución en TestSprite (`Live Web App`)
 Panel de resultados de **TestSprite** (`Run: Nov 25, 12:52 AM`) mostrando el resumen de ejecución (`83% Pass Rate`, `10 Passed`, `2 Failed`, `0 Blocked`, `12 Total`) y el diagnóstico que originó la corrección de `CATALOG-003`.
 
-![Resultados TestSprite](imagenes_informe_lab4/12_testsprite_ejecucion.png)
+![Resultados TestSprite](imagenes_informe_lab5/12_testsprite_ejecucion.png)
 
 ---
 
